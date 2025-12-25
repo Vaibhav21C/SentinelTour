@@ -282,7 +282,8 @@ header .container {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+  /* Lightened overlay to avoid overly dark areas while keeping text readable */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25));
   z-index: 1;
 }
 
@@ -521,8 +522,9 @@ header .container {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50%;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  /* Reduced height and darkness of the card gradient overlay */
+  height: 45%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.35));
   z-index: 1;
 }
 
@@ -1122,7 +1124,8 @@ footer .text-dark {
 .hero-section .btn,
 .hero-content-wrapper,
 .scroll-down-indicator {
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  /* Subtle text shadow for visibility over light images */
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 /* Headings and text inside overlayed image cards should be readable */

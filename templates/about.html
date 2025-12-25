@@ -3,239 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Darjeeling - Darjeeling Travel</title>
-    <meta name="description" content="Learn more about Darjeeling and our travel services">
+    <title>About Meghalaya - Meghalaya Tourism</title>
+    <meta name="description" content="Learn about Meghalaya — its culture, nature, and safety-first tourism initiatives.">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
     <script src="main.js" defer></script>
 </head>
 <body>
     <!-- Navbar -->
-    <header>
-        <div class="container">
-            <!-- Logo -->
-            <div class="logo">
-                <a href="index.html">Darjeeling 360°</a>
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/Site logo.png" alt="Site Logo" class="me-4 navbar-logo">
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Content -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Main Navigation -->
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="destinations.html">Destinations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="experiences.html">Experiences</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="useful-info.html">Travel Info</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Side Icons -->
+                    <div class="d-flex align-items-center ms-auto">
+                        <button class="btn btn-link text-dark me-3" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button class="btn btn-link text-dark me-3" aria-label="Favorites">
+                            <i class="fas fa-heart"></i>
+                        </button>
+
+                        <!-- Login Dropdown Menu -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary rounded-pill px-3 dropdown-toggle" type="button"
+                                id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i> Sign In
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="loginDropdown">
+                                <li><h6 class="dropdown-header">Choose Login Option</h6></li>
+                                <li><a class="dropdown-item" href="user-login.html"><i class="fas fa-sign-in-alt me-2"></i>User Login</a></li>
+                                <li><a class="dropdown-item" href="user-registration.html"><i class="fas fa-user-plus me-2"></i>User Registration</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="authority-login.html"><i class="fas fa-user-shield me-2"></i>Authority Login</a></li>
+                                <li><a class="dropdown-item" href="checkpoint-login.html"><i class="fas fa-id-badge me-2"></i>Checkpoint Login</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Main Navigation -->
-            <nav class="main-nav">
-                <a href="destinations.html">Destinations</a>
-                <a href="experiences.html">Experiences</a>
-                <a href="attractions.html">Attractions</a>
-                <a href="about.html">+Darjeeling</a>
-                <a href="events.html">Events</a>
-            </nav>
-
-            <!-- Right Side Icons -->
-            <div class="right-icons">
-                <button aria-label="Search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
-                <button aria-label="Favorites">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                </button>
-                <button aria-label="User Account">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Toggle Menu">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu">
-            <a href="destinations.html">Destinations</a>
-            <a href="experiences.html">Experiences</a>
-            <a href="attractions.html">Attractions</a>
-            <a href="about.html">+Darjeeling</a>
-            <a href="events.html">Events</a>
-        </div>
+        </nav>
     </header>
 
+    <!-- Spacer for fixed header -->
+    <div class="header-spacer"></div>
+
     <main>
-        <!-- Page Header -->
-        <section class="page-header">
-            <div class="container">
-                <h1>About Darjeeling</h1>
-                <p>Discover the history, culture, and beauty of the Queen of Hills</p>
+        <!-- Page Hero/Header -->
+        <section class="hero-section position-relative">
+            <img src="images/hero_meghalaya_landscape.png" alt="Meghalaya Landscape" class="hero-image w-100">
+            <div class="overlay"></div>
+
+            <div class="hero-content-wrapper position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                <div class="container text-center">
+                    <span class="badge bg-primary px-3 py-2 mb-3" data-aos="fade-up">MEGHALAYA</span>
+                    <h1 class="display-1 fw-bold mb-3" data-aos="fade-up" data-aos-delay="100">About the Cloud Kingdom</h1>
+                    <p class="lead fw-light" data-aos="fade-up" data-aos-delay="200">Explore living root bridges, crystal caves, and dramatic waterfalls — with safety-first tourism.</p>
+                </div>
             </div>
         </section>
 
         <!-- About Content -->
-        <section class="about-section">
+        <section class="py-5">
             <div class="container">
-                <div class="about-content">
-                    <div class="about-image">
-                        <img src="images/darjeeling-view.jpg" alt="Darjeeling Landscape">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-6" data-aos="fade-right">
+                        <img src="images/Meghalaya Waterfall.jpg" class="img-fluid rounded-4 shadow" alt="Meghalaya Waterfalls">
                     </div>
-                    <div class="about-text">
-                        <h2>The Queen of Hills</h2>
-                        <p>Nestled in the Lesser Himalayas at an elevation of 2,000 meters (6,700 ft), Darjeeling is internationally renowned for its tea industry and the Darjeeling Himalayan Railway, a UNESCO World Heritage Site.</p>
-                        <p>The name Darjeeling comes from the Tibetan words "Dorje" meaning thunderbolt and "ling" meaning place or land, hence "the land of the thunderbolt".</p>
-                        <p>The history of Darjeeling is intertwined with that of Nepal, Sikkim, Bhutan, and Bengal. Until the early 19th century, the area was ruled by the Kingdom of Sikkim, with settlement consisting of a few villages of the Lepcha people.</p>
-                    </div>
-                </div>
-
-                <div class="about-features">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        </div>
-                        <h3>Rich Cultural Heritage</h3>
-                        <p>Darjeeling is a melting pot of different cultures including Nepali, Tibetan, Bengali, and indigenous Lepcha traditions.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                            </svg>
-                        </div>
-                        <h3>World-Famous Tea</h3>
-                        <p>Known as the "Champagne of Teas," Darjeeling tea is renowned worldwide for its muscatel flavor and exquisite aroma.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                                <line x1="6" y1="1" x2="6" y2="4"></line>
-                                <line x1="10" y1="1" x2="10" y2="4"></line>
-                                <line x1="14" y1="1" x2="14" y2="4"></line>
-                            </svg>
-                        </div>
-                        <h3>Himalayan Railway</h3>
-                        <p>The Darjeeling Himalayan Railway, also known as the "Toy Train," is a UNESCO World Heritage Site that has been operating since 1881.</p>
+                    <div class="col-lg-6" data-aos="fade-left">
+                        <h2 class="fw-bold mb-3">Nature, Culture, and Safety</h2>
+                        <p class="text-muted">Meghalaya — the abode of clouds — is home to living root bridges, ancient limestone caves, lush rainforests, and iconic waterfalls. Its vibrant Khasi, Garo, and Jaintia cultures shape the rhythm of life amidst rolling hills and misty valleys.</p>
+                        <p class="text-muted mb-0">This portal supports safe exploration through identity verification, geofencing, live location monitoring, and security alerts — designed to help visitors and authorities collaborate for a seamless travel experience.</p>
                     </div>
                 </div>
 
-                <div class="about-mission">
-                    <h2>Our Mission</h2>
-                    <p>At Darjeeling 360°, we are dedicated to showcasing the authentic beauty and cultural richness of Darjeeling while promoting sustainable tourism practices that benefit local communities and preserve the natural environment.</p>
-                    <p>We believe in creating immersive travel experiences that connect visitors with the heart and soul of Darjeeling, supporting local artisans, and ensuring that tourism contributes positively to the region's development.</p>
+                <div class="row g-4 mt-4">
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                            <div class="mb-3 text-primary">
+                                <i class="fas fa-tree fa-2x"></i>
+                            </div>
+                            <h3 class="h5 fw-bold">Living Root Bridges</h3>
+                            <p class="text-muted mb-0">Ingenious bioengineering by local communities creates natural bridges woven from living roots.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                            <div class="mb-3 text-primary">
+                                <i class="fas fa-water fa-2x"></i>
+                            </div>
+                            <h3 class="h5 fw-bold">Waterfalls & Rainforests</h3>
+                            <p class="text-muted mb-0">Nohkalikai, Wei Sawdong, and more — spectacular cascades surrounded by emerald canopies.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                            <div class="mb-3 text-primary">
+                                <i class="fas fa-mountain fa-2x"></i>
+                            </div>
+                            <h3 class="h5 fw-bold">Caves & Adventure</h3>
+                            <p class="text-muted mb-0">Explore limestone cave systems like Mawsmai and Krem Liat Prah with guided, safe routes.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Team Section -->
-        <section class="team-section">
-            <div class="container">
-                <h2 class="section-title">Our Team</h2>
-                <p class="section-subtitle">Meet the passionate locals who make your Darjeeling experience unforgettable</p>
-                
-                <div class="team-grid">
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="images/darjeeling-view.jpg" alt="Team Member">
-                        </div>
-                        <h3>Rajesh Sharma</h3>
-                        <p class="team-role">Founder & Guide</p>
-                        <p class="team-bio">Born and raised in Darjeeling, Rajesh has over 15 years of experience guiding visitors through the hidden gems of the region.</p>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="images/darjeeling-view.jpg" alt="Team Member">
-                        </div>
-                        <h3>Priya Gurung</h3>
-                        <p class="team-role">Tea Expert</p>
-                        <p class="team-bio">With a family history in tea production spanning generations, Priya brings unparalleled knowledge about Darjeeling's famous teas.</p>
-                    </div>
-                    
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="images/darjeeling-view.jpg" alt="Team Member">
-                        </div>
-                        <h3>Tenzin Dorje</h3>
-                        <p class="team-role">Trekking Specialist</p>
-                        <p class="team-bio">An experienced mountaineer who has explored every trail in the region, Tenzin ensures safe and memorable trekking adventures.</p>
-                    </div>
+                <div class="mt-5" data-aos="fade-up">
+                    <h2 class="fw-bold mb-3">Our Mission</h2>
+                    <p class="text-muted">We promote sustainable tourism that benefits local communities and protects Meghalaya’s unique ecology. Through digital verification, geofencing, and real-time monitoring, travelers and authorities stay connected — ensuring safety and enhancing the travel experience.</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (same style as index) -->
     <footer>
         <div class="container">
-            <div class="footer-container">
-                <!-- Footer Column 1 -->
+            <div class="footer-header">
+                <div class="footer-badge">MEGHALAYA TOURISM</div>
+                <h2 class="footer-title">YOUR CLOUD KINGDOM ADVENTURE AWAITS</h2>
+            </div>
+
+            <div class="footer-grid">
                 <div class="footer-column">
-                    <div class="footer-logo">Darjeeling 360°</div>
-                    <p class="footer-description">Discover the beauty and culture of Darjeeling with our curated travel experiences.</p>
+                    <h3 class="footer-column-title">About Us</h3>
+                    <p class="footer-text text-white">Your complete guide to exploring the mystical beauty of Meghalaya and its enchanting cloud-covered landscapes.</p>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="destinations.html" class="footer-link text-white">Destinations</a></li>
+                        <li><a href="experiences.html" class="footer-link text-white">Experiences</a></li>
+                        <li><a href="attractions.html" class="footer-link text-white">Attractions</a></li>
+                        <li><a href="events.html" class="footer-link text-white">Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Information</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html" class="footer-link text-white">About Meghalaya</a></li>
+                        <li><a href="news.html" class="footer-link text-white">News</a></li>
+                        <li><a href="useful-info.html" class="footer-link text-white">Useful Information</a></li>
+                        <li><a href="checkpoint-login.html" class="footer-link text-warning"><i class="fas fa-shield-alt me-1"></i> Checkpoint Access</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Connect With Us</h4>
                     <div class="social-icons">
                         <a href="#" class="social-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                             </svg>
                         </a>
                         <a href="#" class="social-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                             </svg>
                         </a>
                     </div>
                 </div>
-
-                <!-- Footer Column 2 -->
-                <div class="footer-column">
-                    <h3 class="footer-heading">Destinations</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Tiger Hill</a></li>
-                        <li><a href="#">Darjeeling Toy Train</a></li>
-                        <li><a href="#">Tea Gardens</a></li>
-                        <li><a href="#">Batasia Loop</a></li>
-                    </ul>
-                </div>
-
-                <!-- Footer Column 3 -->
-                <div class="footer-column">
-                    <h3 class="footer-heading">Experiences</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Tea Tasting</a></li>
-                        <li><a href="#">Himalayan Trekking</a></li>
-                        <li><a href="#">Cultural Tours</a></li>
-                        <li><a href="#">Photography</a></li>
-                    </ul>
-                </div>
-
-                <!-- Footer Column 4 -->
-                <div class="footer-column">
-                    <h3 class="footer-heading">Information</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
-                </div>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 Darjeeling 360°. All rights reserved.</p>
+            <div class="footer-bottom text-white">
+                <p>© <span id="current-year"></span> Meghalaya Tourism. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+    </script>
 </body>
 </html>
