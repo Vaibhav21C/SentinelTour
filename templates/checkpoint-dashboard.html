@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint Assessment - Security Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            padding: 1rem 1.5rem;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #3b82f6;
+        }
+
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .status-card {
+            transition: 0.3s;
+            border: none;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .scan-frame {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-frame video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-online {
+            background-color: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .verification-result {
+            display: none;
+        }
+
+        .verification-result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar d-flex flex-column">
+        <div class="p-4 border-bottom border-white-10">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-shield-alt fa-2x text-primary me-2"></i>
+                <div>
+                    <h5 class="mb-0 fw-bold">Checkpoint</h5>
+                    <small class="text-white-50">Security Access</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav flex-column mt-4 flex-grow-1">
+            <a href="#" class="nav-link active" onclick="switchSection('verify')">
+                <i class="fas fa-search-location"></i> Verify Tourist
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('alerts')">
+                <i class="fas fa-exclamation-triangle"></i> Security Alerts
+                <span class="badge bg-danger ms-auto">3</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchSection('history')">
+                <i class="fas fa-history"></i> Scan History
+            </a>
+        </nav>
+
+        <div class="p-4 border-top border-white-10">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-success rounded-circle p-2 me-2">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0" id="officerName">Officer ID: 8821</h6>
+                    <small class="text-success"><span class="status-indicator status-online me-1"></span> On
+                        Duty</small>
+                </div>
+            </div>
+            <button class="btn btn-outline-danger w-100 btn-sm" onclick="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i> End Shift
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-bold mb-1">Tourist Verification</h2>
+                <p class="text-muted mb-0" id="checkpointLocation">Location: Shillong Entry Point (CP-01)</p>
+            </div>
+            <div class="d-flex gap-3">
+                <div class="bg-white p-2 px-3 rounded shadow-sm border">
+                    <span class="text-muted small d-block">Time</span>
+                    <span class="fw-bold" id="clock">12:00 PM</span>
+                </div>
+                <div class="bg-white p-2 px-3 rounded shadow-sm border">
+                    <span class="text-muted small d-block">Today's Scans</span>
+                    <span class="fw-bold text-primary">142</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Section -->
+        <div id="verify-section">
+            <div class="row g-4">
+                <!-- Camera / Input Column -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-white border-0 py-3 rounded-top-4">
+                            <h5 class="fw-bold mb-0"><i class="fas fa-id-card-alt me-2 text-primary"></i>Identity Check
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Input Method Tabs -->
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active rounded-pill" id="pills-id-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-id" type="button">Manual ID Input</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link rounded-pill" id="pills-face-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-face" type="button">Face Scan</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="pills-tabContent">
+                                <!-- ID Input -->
+                                <div class="tab-pane fade show active" id="pills-id">
+                                    <div class="bg-light p-4 rounded-3 mb-4">
+                                        <label class="form-label fw-bold small text-uppercase text-muted">Enter Tourist
+                                            Unique Identifier</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" class="form-control" id="touristIdInput"
+                                                placeholder="Ex: T-2023-8821" style="letter-spacing: 2px;">
+                                            <button class="btn btn-primary px-4" onclick="verifyById()"><i
+                                                    class="fas fa-search me-2"></i> Verify</button>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-info border-0 shadow-sm">
+                                        <div class="d-flex">
+                                            <i class="fas fa-info-circle fa-lg mt-1 me-3"></i>
+                                            <div>
+                                                <strong>Tip:</strong> Ask the tourist for their digital QR code or ID
+                                                number.
+                                                If ID is unreadable, switch to Face Scan.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Face Scan -->
+                                <div class="tab-pane fade" id="pills-face">
+                                    <div class="scan-frame mb-3 position-relative">
+                                        <div id="cameraPlaceholder" class="text-center text-muted">
+                                            <i class="fas fa-camera fa-3x mb-3"></i>
+                                            <p>Camera inactive</p>
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                onclick="startCamera()">Activate Camera</button>
+                                        </div>
+                                        <video id="scanVideo" class="d-none" autoplay playsinline></video>
+                                        <canvas id="scanCanvas" class="d-none"></canvas>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" id="scanBtn" disabled
+                                            onclick="captureAndVerify()"><i class="fas fa-expand me-2"></i> Scan &
+                                            Verify</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Column -->
+                <div class="col-lg-5">
+                    <!-- Default State -->
+                    <div id="resultPlaceholder"
+                        class="card border-0 border-dashed shadow-sm rounded-4 h-100 d-flex align-items-center justify-content-center bg-light text-center p-5">
+                        <div class="text-muted">
+                            <div class="mb-3 bg-white p-3 rounded-circle d-inline-block shadow-sm">
+                                <i class="fas fa-user-shield fa-3x text-secondary"></i>
+                            </div>
+                            <h5>Ready to Verify</h5>
+                            <p class="small mb-0">Enter ID or scan face to view tourist details and authorization
+                                status.</p>
+                        </div>
+                    </div>
+
+                    <!-- Verified Result (Hidden by default) -->
+                    <div id="verificationResult"
+                        class="verification-result card border-0 shadow rounded-4 h-100 overflow-hidden">
+                        <div class="card-header bg-success text-white py-3">
+                            <!-- Change bg-success to bg-danger for rejected -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 fw-bold"><i class="fas fa-check-circle me-2"></i> ACCESS GRANTED</h5>
+                                <span class="badge bg-white text-success rounded-pill px-3">Verified</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            <img src="images/Face Verification.jpg"
+                                class="rounded-circle shadow-sm mb-3 border border-4 border-success" width="120"
+                                height="120" style="object-fit: cover;">
+                            <h4 class="fw-bold mb-1" id="resName">Rahul Sharma</h4>
+                            <p class="text-muted mb-3" id="resId">ID: T-2023-8821</p>
+
+                            <div class="row g-3 text-start mt-2">
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded">
+                                        <small class="text-muted d-block">Nationality</small>
+                                        <strong>Indian</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-light rounded">
+                                        <small class="text-muted d-block">Visa Status</small>
+                                        <strong class="text-success">Valid</strong>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 bg-light rounded">
+                                        <small class="text-muted d-block">Authorized Zones</small>
+                                        <strong>Shillong, Cherrapunji, Dawki</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 d-grid gap-2">
+                                <button class="btn btn-outline-success btn-lg" onclick="logEntry()"><i
+                                        class="fas fa-door-open me-2"></i> Log Entry</button>
+                                <button class="btn btn-outline-secondary" onclick="resetVerification()">New
+                                    Check</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History/Alerts placeholder sections (simplified) -->
+        <div id="alerts-section" style="display:none;">
+            <div class="alert alert-warning shadow-sm rounded-3">
+                <h5><i class="fas fa-exclamation-circle me-2"></i> Active Alerts</h5>
+                <hr>
+                <div class="list-group">
+                    <a href="#"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Suspicious Activity Detected</strong>
+                            <small class="d-block text-muted">Zone B - 10 mins ago</small>
+                        </div>
+                        <span class="badge bg-danger rounded-pill">High</span>
+                    </a>
+                    <a href="#"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Permit Expiring: John Doe</strong>
+                            <small class="d-block text-muted">Zone A - 30 mins ago</small>
+                        </div>
+                        <span class="badge bg-warning text-dark rounded-pill">Medium</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="history-section" style="display:none;">
+            <div class="card shadow-sm rounded-4 border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">Recent Scans</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Tourist Name</th>
+                                <th>ID</th>
+                                <th>Status</th>
+                                <th>Officer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>11:45 AM</td>
+                                <td>Priya Patel</td>
+                                <td>T-9921</td>
+                                <td><span class="badge bg-success">Allowed</span></td>
+                                <td>8821</td>
+                            </tr>
+                            <tr>
+                                <td>11:42 AM</td>
+                                <td>Amit Singh</td>
+                                <td>T-9920</td>
+                                <td><span class="badge bg-danger">Denied</span></td>
+                                <td>8821</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Clock
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        // Mock Session Data
+        const badge = sessionStorage.getItem('securityBadgeId');
+        if (badge) document.getElementById('officerName').innerText = `Officer ID: ${badge}`;
+        const loc = sessionStorage.getItem('securityLocation');
+        if (loc) document.getElementById('checkpointLocation').innerText = `Location: ${loc}`;
+
+        function switchSection(sec) {
+            document.getElementById('verify-section').style.display = 'none';
+            document.getElementById('alerts-section').style.display = 'none';
+            document.getElementById('history-section').style.display = 'none';
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            event.currentTarget.classList.add('active'); // active logic simplified
+
+            document.getElementById(`${sec}-section`).style.display = 'block';
+        }
+
+        // Camera Logic
+        let stream;
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('scanVideo');
+                video.srcObject = stream;
+                video.classList.remove('d-none');
+                document.getElementById('cameraPlaceholder').classList.add('d-none');
+                document.getElementById('scanBtn').disabled = false;
+            } catch (err) {
+                alert('Camera access failed: ' + err.message);
+            }
+        }
+
+        function verifyById() {
+            const id = document.getElementById('touristIdInput').value;
+            if (!id) return alert('Enter an ID');
+
+            simulateVerificationResult(true);
+        }
+
+        function captureAndVerify() {
+            // In a real app, capture canvas frame here
+            simulateVerificationResult(true);
+        }
+
+        function simulateVerificationResult(success) {
+            document.getElementById('resultPlaceholder').classList.add('d-none');
+            const res = document.getElementById('verificationResult');
+            res.classList.remove('d-none');
+            res.classList.add('show');
+
+            // Mock data population could go here
+        }
+
+        function resetVerification() {
+            document.getElementById('resultPlaceholder').classList.remove('d-none');
+            document.getElementById('verificationResult').classList.add('d-none');
+            document.getElementById('verificationResult').classList.remove('show');
+            document.getElementById('touristIdInput').value = '';
+        }
+
+        function logEntry() {
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-check me-2"></i> Logged Verified';
+            btn.classList.remove('btn-outline-success');
+            btn.classList.add('btn-success');
+            setTimeout(() => resetVerification(), 1500);
+        }
+
+        function logout() {
+            if (confirm('End current shift and logout?')) {
+                sessionStorage.clear();
+                window.location.href = 'checkpoint-login.html';
+            }
+        }
+    </script>
+</body>
+
+</html>
