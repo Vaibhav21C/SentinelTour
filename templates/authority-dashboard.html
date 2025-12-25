@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authority Dashboard - Meghalaya Tourism</title>
+    <meta name="description" content="Official authority dashboard for Meghalaya Tourism management">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-sidebar {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            min-height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        /* Ensure charts keep their height and don't collapse */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .chart-wrapper.chart-lg { height: 360px; }
+        .chart-wrapper.chart-md { height: 300px; }
+        .chart-wrapper.chart-sm { height: 260px; }
+        .chart-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: #fbbf24;
+        }
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            border-left-color: #fbbf24;
+        }
+        .main-content {
+            background-color: #f8fafc;
+            min-height: 100vh;
+        }
+        /* Contrast fixes for headings on light backgrounds */
+        .dashboard-header h2,
+        .dashboard-header p,
+        .content-section h3,
+        .stats-card h5,
+        .table-container th,
+        .alert-card h6 {
+            color: #111827; /* gray-900 */
+        }
+        .text-muted { color: #4b5563 !important; } /* stronger contrast */
+        .dashboard-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .alert-card {
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .alert-high {
+            border-left-color: #ef4444;
+            background: linear-gradient(90deg, #fef2f2 0%, white 100%);
+        }
+        .alert-medium {
+            border-left-color: #f59e0b;
+            background: linear-gradient(90deg, #fffbeb 0%, white 100%);
+        }
+        .alert-low {
+            border-left-color: #10b981;
+            background: linear-gradient(90deg, #ecfdf5 0%, white 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Authority Dashboard Layout -->
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar" style="width: 280px;">
+            <div class="sidebar-brand">
+                <div class="d-flex align-items-center">
+                    <img src="images/Site logo.png" alt="Site Logo" height="110" class="me-4" style="border-radius: 12px; width: auto; min-width: 200px; max-width: 400px; object-fit: contain;">
+                    <div>
+            
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="sidebar-link active" data-target="dashboard-content">
+                    <i class="fas fa-tachometer-alt me-3"></i>
+                    Dashboard
+                </a>
+                <a href="#face-verify" class="sidebar-link" data-target="face-verify-content">
+                    <i class="fas fa-user-check me-3"></i>
+                    Face Verification
+                </a>
+                <a href="#tourists" class="sidebar-link" data-target="tourists-content">
+                    <i class="fas fa-users me-3"></i>
+                    Tourist Management
+                    <span class="badge bg-warning ms-auto">12</span>
+                </a>
+                <a href="#approvals" class="sidebar-link" data-target="approvals-content">
+                    <i class="fas fa-clipboard-check me-3"></i>
+                    Pending Approvals
+                    <span class="badge bg-danger ms-auto">8</span>
+                </a>
+                <a href="#alerts" class="sidebar-link" data-target="alerts-content">
+                    <i class="fas fa-exclamation-triangle me-3"></i>
+                    Security Alerts
+                    <span class="badge bg-danger ms-auto">5</span>
+                </a>
+                <a href="#locations" class="sidebar-link" data-target="locations-content">
+                    <i class="fas fa-map-marker-alt me-3"></i>
+                    Location Monitoring
+                </a>
+                <a href="#reports" class="sidebar-link" data-target="reports-content">
+                    <i class="fas fa-chart-bar me-3"></i>
+                    Reports & Analytics
+                </a>
+                <a href="#settings" class="sidebar-link" data-target="settings-content">
+                    <i class="fas fa-cog me-3"></i>
+                    Settings
+                </a>
+            </nav>
+            
+            <div class="mt-auto p-3">
+                <div class="text-center">
+                    <small class="text-white-50">Logged in as:</small>
+                    <div class="text-white fw-bold" id="authorityName">Authority User</div>
+                    <button class="btn btn-outline-light btn-sm mt-2" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow-1 main-content">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                                            <h2 class="mb-1" id="pageTitle">Dashboard Overview</h2>
+                    <p class="text-muted mb-0">Welcome to Meghalaya Tourism Authority Portal</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <small class="text-muted">Last Updated:</small>
+                            <div class="fw-bold" id="lastUpdated">Just now</div>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-sync-alt me-2"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="p-4">
+                <!-- Dashboard Overview -->
+                <div id="dashboard-content" class="content-section active">
+                    <!-- Stats Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-primary me-3">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">1,247</h3>
+                                        <small class="text-muted">Active Tourists</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-warning me-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">12</h3>
+                                        <small class="text-muted">Pending Approvals</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-danger me-3">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">5</h3>
+                                        <small class="text-muted">Active Alerts</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-success me-3">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">23</h3>
+                                        <small class="text-muted">Monitored Locations</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-8">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Tourist Activity Trends</h5>
+                                <div class="chart-wrapper chart-lg">
+                                    <canvas id="touristChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Location Distribution</h5>
+                                <div class="chart-wrapper chart-md">
+                                    <canvas id="locationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Recent Tourist Registrations</h5>
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <div>
+                                            <div class="fw-bold">John Smith</div>
+                                            <small class="text-muted">ID: A12345678</small>
+                                        </div>
+                                        <span class="badge bg-primary">New</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <div>
+                                            <div class="fw-bold">Sarah Johnson</div>
+                                            <small class="text-muted">ID: B87654321</small>
+                                        </div>
+                                        <span class="badge bg-warning">Pending</span>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <div>
+                                            <div class="fw-bold">Mike Wilson</div>
+                                            <small class="text-muted">ID: C11223344</small>
+                                        </div>
+                                        <span class="badge bg-success">Approved</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">System Status</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-2" style="color: rgb(3, 3, 3)">
+                                    <span>GPS Tracking</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2" style="color: rgb(3, 3, 3)">
+                                    <span>Database</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2" style="color: rgb(3, 3, 3)">
+                                    <span>Notification System</span>
+                                    <span class="badge bg-warning">Maintenance</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center" style="color: rgb(3, 3, 3)">
+                                    <span>Backup System</span>
+                                    <span class="badge bg-success">Online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tourist Management -->
+                <div id="tourists-content" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Tourist Management</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" placeholder="Search tourists..." style="width: 300px;">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>ID Number</th>
+                                    <th>Status</th>
+                                    <th>Last Location</th>
+                                    <th>Registration Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Smith</td>
+                                    <td>A12345678</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>Tiger Hill</td>
+                                    <td>2024-01-15</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sarah Johnson</td>
+                                    <td>B87654321</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>Tea Gardens</td>
+                                    <td>2024-01-14</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1">View</button>
+                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pending Approvals -->
+                <div id="approvals-content" class="content-section">
+                    <h3 class="mb-4">Pending Approvals</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h6 class="fw-bold" style="color: rgb(3, 3, 3)">John Doe</h6>
+                                        <small class="text-muted">ID: A12345678</small>
+                                    </div>
+                                    <span class="badge bg-warning">Pending Review</span>
+                                </div>
+                                <p class="text-muted small mb-3">Requesting access to restricted areas in Tiger Hill region.</p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                    <button class="btn btn-danger btn-sm">Reject</button>
+                                    <button class="btn btn-outline-primary btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h6 class="fw-bold" style="color: rgb(3, 3, 3)">Jane Smith</h6>
+                                        <small class="text-muted">ID: B98765432</small>
+                                    </div>
+                                    <span class="badge bg-warning">Pending Review</span>
+                                </div>
+                                <p class="text-muted small mb-3">Application for extended stay in Darjeeling district.</p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-success btn-sm">Approve</button>
+                                    <button class="btn btn-danger btn-sm">Reject</button>
+                                    <button class="btn btn-outline-primary btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Alerts -->
+                <div id="alerts-content" class="content-section">
+                    <h3 class="mb-4">Security Alerts</h3>
+                    <div class="alert-card alert-high">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="fw-bold text-danger">High Priority: Unauthorized Access</h6>
+                                <p class="mb-1" style="color: rgb(3, 3, 3)">Tourist ID: A12345678 attempted to access restricted area</p>
+                                <small class="text-muted" style="color: rgb(3, 3, 3)">Location: Tiger Hill Restricted Zone | 15 minutes ago</small>
+                            </div>
+                            <button class="btn btn-danger btn-sm" style="color: rgb(3, 3, 3)">Take Action</button>
+                        </div>
+                    </div>
+                    <div class="alert-card alert-medium">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="fw-bold text-warning">Medium Priority: Location Alert</h6>
+                                <p class="mb-1" style="color: rgb(3, 3, 3)">Tourist ID: B87654321 has been stationary for 2+ hours</p>
+                                <small class="text-muted">Location: Eagle's Nest Point | 1 hour ago</small>
+                            </div>
+                            <button class="btn btn-warning btn-sm">Investigate</button>
+                        </div>
+                    </div>
+                    <div class="alert-card alert-low">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="fw-bold text-success">Low Priority: Check-in Reminder</h6>
+                                <p class="mb-1" style="color: rgb(3, 3, 3)">Tourist ID: C11223344 missed scheduled check-in</p>
+                                <small class="text-muted">Expected: 2 hours ago</small>
+                            </div>
+                            <button class="btn btn-outline-success btn-sm">Send Reminder</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Monitoring -->
+                <div id="locations-content" class="content-section">
+                    <h3 class="mb-4">Location Heatmap</h3>
+                    <div class="stats-card">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0">Live Density Heatmap</h5>
+                                    <button class="btn btn-danger btn-sm" id="addDangerAlert"><i class="fas fa-bell me-1"></i> Add Danger Alert</button>
+                                </div>
+                                <div id="meghalayaMap" class="rounded" style="height: 420px;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="fw-bold mb-3">Legend & Stats</h5>
+                                <div class="mb-3">
+                                    <span class="badge bg-success me-2">Safe</span>
+                                    <span class="badge bg-warning text-dark me-2">Suspicious</span>
+                                    <span class="badge bg-danger">Danger</span>
+                                </div>
+                                <div id="locationStats">
+                                <div class="d-flex justify-content-between mb-2">
+                                        <span>Safe</span><span class="badge bg-success" id="safeCount">0</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                        <span>Suspicious</span><span class="badge bg-warning text-dark" id="susCount">0</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                        <span>Danger</span><span class="badge bg-danger" id="dangerCount">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports & Analytics -->
+                <div id="reports-content" class="content-section">
+                    <h3 class="mb-4">Reports & Analytics</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Monthly Tourist Report</h5>
+                                <div class="chart-wrapper chart-md">
+                                    <canvas id="monthlyChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Popular Destinations</h5>
+                                <div class="chart-wrapper chart-md">
+                                    <canvas id="destinationsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div id="settings-content" class="content-section">
+                    <h3 class="mb-4">Settings</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">System Configuration</h5>
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Alert Threshold</label>
+                                        <select class="form-select">
+                                            <option>Low (5 minutes)</option>
+                                            <option selected>Medium (10 minutes)</option>
+                                            <option>High (15 minutes)</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Auto-approval Limit</label>
+                                        <input type="number" class="form-control" value="24" placeholder="Hours">
+                                    </div>
+                                    <button class="btn btn-primary">Save Settings</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">User Management</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Authority Users</span>
+                                    <span class="badge bg-primary">5</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Active Sessions</span>
+                                    <span class="badge bg-success">3</span>
+                                </div>
+                                <button class="btn btn-outline-primary">Manage Users</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Face Verification Section -->
+                <div id="face-verify-content" class="content-section">
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <div class="btn-group" role="group" aria-label="Face verification controls">
+                            <button class="btn btn-outline-dark" id="startDashCamera"><i class="fas fa-video me-1"></i> Start Camera</button>
+                            <button class="btn btn-primary" id="captureDashPhoto" disabled><i class="fas fa-camera me-1"></i> Capture</button>
+                            <button class="btn btn-outline-warning" id="resetDashPhoto" disabled><i class="fas fa-redo me-1"></i> Reset</button>
+                            <button class="btn btn-success" id="matchDashPhoto" disabled><i class="fas fa-user-check me-1"></i> Match</button>
+                        </div>
+                        <span class="badge bg-secondary align-self-center" id="dashMatchStatus">No match attempted</span>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Live Camera</h5>
+                                <div class="ratio ratio-4x3 bg-light rounded position-relative overflow-hidden">
+                                    <video id="dashVideo" autoplay playsinline class="w-100 h-100" style="object-fit: cover;"></video>
+                                    <canvas id="dashCanvas" class="d-none"></canvas>
+                                </div>
+                                <img id="dashSnapshot" class="img-fluid mt-3 d-none rounded" alt="Live Snapshot" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <h5 class="fw-bold mb-3">Registration Photo</h5>
+                                <div class="ratio ratio-4x3 bg-light rounded position-relative overflow-hidden d-flex align-items-center justify-content-center">
+                                    <img id="registeredUserPhoto" class="img-fluid" alt="Registered photo" />
+                                </div>
+                                <div class="small text-muted mt-2">Loaded from user registration (session)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation Library JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animation
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = sessionStorage.getItem('authorityLoggedIn');
+            const authorityId = sessionStorage.getItem('authorityId');
+            const department = sessionStorage.getItem('authorityDepartment');
+            
+            if (!isLoggedIn) {
+                window.location.href = 'authority-login.html';
+                return;
+            }
+            
+            // Update user info
+            document.getElementById('authorityName').textContent = authorityId || 'Authority User';
+            
+            // Initialize charts
+            initializeCharts();
+            
+            // Force initial resize once charts are in DOM
+            setTimeout(() => {
+                if (window.__dashboardCharts) {
+                    window.__dashboardCharts.forEach(ch => { try { ch.resize(); ch.update(); } catch(e) {} });
+                }
+            }, 50);
+            
+            // Update last updated time
+            updateLastUpdated();
+        });
+
+        // Observe section visibility to trigger resize
+        const observer = new MutationObserver(() => {
+            if (window.__dashboardCharts) {
+                window.__dashboardCharts.forEach(ch => { try { ch.resize(); ch.update(); } catch(e) {} });
+            }
+        });
+        observer.observe(document.body, { attributes: false, childList: true, subtree: true });
+
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target content
+                const target = this.getAttribute('data-target');
+                const targetSection = document.getElementById(target);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                
+                // Update page title
+                const pageTitle = this.textContent.trim();
+                document.getElementById('pageTitle').textContent = pageTitle;
+                
+                // Resize/redraw charts when switching sections
+                requestAnimationFrame(() => {
+                    if (window.__dashboardCharts) {
+                        window.__dashboardCharts.forEach(ch => {
+                            try { ch.resize(); ch.update(); } catch (e) {}
+                        });
+                    }
+                });
+            });
+        });
+
+        // Initialize charts
+        function initializeCharts() {
+            window.__dashboardCharts = [];
+            // Tourist Activity Chart
+            const touristCtx = document.getElementById('touristChart').getContext('2d');
+            const touristChart = new Chart(touristCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'New Tourists',
+                        data: [45, 52, 38, 67, 89, 95, 120],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    resizeDelay: 150,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+            window.__dashboardCharts.push(touristChart);
+
+            // Location Distribution Chart
+            const locationCtx = document.getElementById('locationChart').getContext('2d');
+            const locationChart = new Chart(locationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tiger Hill', 'Tea Gardens', 'Toy Train', 'Eagle\'s Nest', 'Others'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, animation: false }
+            });
+            window.__dashboardCharts.push(locationChart);
+
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const monthlyChart = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Tourists',
+                        data: [1200, 1350, 1100, 1450, 1600, 1800],
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    resizeDelay: 150,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+            window.__dashboardCharts.push(monthlyChart);
+
+            // Destinations Chart
+            const destinationsCtx = document.getElementById('destinationsChart').getContext('2d');
+            const destinationsChart = new Chart(destinationsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Tiger Hill', 'Tea Gardens', 'Toy Train', 'Eagle\'s Nest'],
+                    datasets: [{
+                        label: 'Visits',
+                        data: [450, 320, 280, 180],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    resizeDelay: 150,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+            window.__dashboardCharts.push(destinationsChart);
+        }
+
+        // Window resize handler to keep charts sane
+        window.addEventListener('resize', () => {
+            if (window.__dashboardCharts) {
+                window.__dashboardCharts.forEach(ch => {
+                    try { ch.resize(); ch.update(); } catch (e) {}
+                });
+            }
+        });
+
+        // Face Verification on Dashboard
+        let dashStream = null;
+        const dashVideo = document.getElementById('dashVideo');
+        const dashCanvas = document.getElementById('dashCanvas');
+        const dashSnapshot = document.getElementById('dashSnapshot');
+        const startDashCameraBtn = document.getElementById('startDashCamera');
+        const captureDashPhotoBtn = document.getElementById('captureDashPhoto');
+        const resetDashPhotoBtn = document.getElementById('resetDashPhoto');
+        const matchDashPhotoBtn = document.getElementById('matchDashPhoto');
+        const dashMatchStatus = document.getElementById('dashMatchStatus');
+        const registeredUserPhoto = document.getElementById('registeredUserPhoto');
+
+        // Load registration photo from session
+        const storedUserPhoto = sessionStorage.getItem('userPhoto');
+        if (storedUserPhoto) {
+            registeredUserPhoto.src = storedUserPhoto;
+        } else {
+            registeredUserPhoto.alt = 'No user photo found. Ask user to provide during registration.';
+        }
+
+        async function startDashCamera() {
+            try {
+                dashStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                dashVideo.srcObject = dashStream;
+                captureDashPhotoBtn.disabled = false;
+                resetDashPhotoBtn.disabled = true;
+                matchDashPhotoBtn.disabled = true;
+                dashSnapshot.classList.add('d-none');
+                dashMatchStatus.textContent = 'Camera ready';
+                dashMatchStatus.className = 'badge bg-info';
+            } catch (e) {
+                alert('Unable to access camera.');
+            }
+        }
+
+        function stopDashCamera() {
+            if (dashStream) {
+                dashStream.getTracks().forEach(t => t.stop());
+                dashStream = null;
+            }
+        }
+
+        function captureDashPhoto() {
+            const width = dashVideo.videoWidth || 640;
+            const height = dashVideo.videoHeight || 480;
+            dashCanvas.width = width;
+            dashCanvas.height = height;
+            dashCanvas.getContext('2d').drawImage(dashVideo, 0, 0, width, height);
+            const dataUrl = dashCanvas.toDataURL('image/jpeg', 0.9);
+            dashSnapshot.src = dataUrl;
+            dashSnapshot.classList.remove('d-none');
+            resetDashPhotoBtn.disabled = false;
+            matchDashPhotoBtn.disabled = !registeredUserPhoto.src;
+            dashMatchStatus.textContent = 'Snapshot captured';
+            dashMatchStatus.className = 'badge bg-secondary';
+            stopDashCamera();
+        }
+
+        function resetDashPhoto() {
+            dashSnapshot.classList.add('d-none');
+            dashSnapshot.src = '';
+            dashMatchStatus.textContent = 'No match attempted';
+            dashMatchStatus.className = 'badge bg-secondary';
+            startDashCamera();
+        }
+
+        // Very simple image similarity using downscaled pixel comparison
+        function computeSimilarity(dataUrlA, dataUrlB) {
+            return new Promise(resolve => {
+                const imgA = new Image();
+                const imgB = new Image();
+                let aReady = false, bReady = false;
+                imgA.onload = check;
+                imgB.onload = check;
+                imgA.src = dataUrlA;
+                imgB.src = dataUrlB;
+                function check() {
+                    if (!aReady) { aReady = true; } else if (!bReady) { bReady = true; } else {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const size = 32;
+                        canvas.width = size; canvas.height = size;
+                        ctx.drawImage(imgA, 0, 0, size, size);
+                        const aData = ctx.getImageData(0, 0, size, size).data;
+                        ctx.clearRect(0,0,size,size);
+                        ctx.drawImage(imgB, 0, 0, size, size);
+                        const bData = ctx.getImageData(0, 0, size, size).data;
+                        let diff = 0;
+                        for (let i = 0; i < aData.length; i += 4) {
+                            const dr = aData[i] - bData[i];
+                            const dg = aData[i+1] - bData[i+1];
+                            const db = aData[i+2] - bData[i+2];
+                            diff += Math.abs(dr) + Math.abs(dg) + Math.abs(db);
+                        }
+                        const maxDiff = size * size * 3 * 255;
+                        const similarity = 1 - (diff / maxDiff);
+                        resolve(similarity);
+                    }
+                }
+            });
+        }
+
+        async function matchDashPhoto() {
+            if (!dashSnapshot.src || !registeredUserPhoto.src) return;
+            dashMatchStatus.textContent = 'Matching...';
+            dashMatchStatus.className = 'badge bg-warning';
+            try {
+                const similarity = await computeSimilarity(dashSnapshot.src, registeredUserPhoto.src);
+                const percentage = Math.max(0, Math.min(100, Math.round(similarity * 100)));
+                if (percentage >= 60) {
+                    dashMatchStatus.textContent = `Match success (${percentage}%)`;
+                    dashMatchStatus.className = 'badge bg-success';
+                } else {
+                    dashMatchStatus.textContent = `Match failed (${percentage}%)`;
+                    dashMatchStatus.className = 'badge bg-danger';
+                }
+            } catch (e) {
+                dashMatchStatus.textContent = 'Match error';
+                dashMatchStatus.className = 'badge bg-danger';
+            }
+        }
+
+        startDashCameraBtn.addEventListener('click', startDashCamera);
+        captureDashPhotoBtn.addEventListener('click', captureDashPhoto);
+        resetDashPhotoBtn.addEventListener('click', resetDashPhoto);
+        matchDashPhotoBtn.addEventListener('click', matchDashPhoto);
+
+        // Update last updated time
+        function updateLastUpdated() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = timeString;
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('authorityLoggedIn');
+            sessionStorage.removeItem('authorityId');
+            sessionStorage.removeItem('authorityDepartment');
+            window.location.href = 'authority-login.html';
+        }
+
+        // Update time every minute
+        setInterval(updateLastUpdated, 60000);
+
+        // Initialize Leaflet map when Locations tab is opened the first time
+        let mapInitialized = false;
+        let leafletMap = null;
+        let markerLayer = null;
+        let heatLayer = null;
+
+        function initMeghalayaMap() {
+            if (mapInitialized) return;
+            const mapEl = document.getElementById('meghalayaMap');
+            if (!mapEl) return;
+            // Approx center of Meghalaya (Shillong area)
+            leafletMap = L.map('meghalayaMap').setView([25.5788, 91.8933], 8);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(leafletMap);
+            markerLayer = L.layerGroup().addTo(leafletMap);
+            heatLayer = L.heatLayer([], { radius: 25, blur: 20, maxZoom: 12, minOpacity: 0.2 }).addTo(leafletMap);
+            // Add initial markers
+            const people = [
+                { name: 'A12345678', status: 'safe', coords: [25.5788, 91.8933] }, // Shillong
+                { name: 'B87654321', status: 'sus', coords: [25.2700, 91.7329] },   // Sohra (Cherrapunji)
+                { name: 'C11223344', status: 'danger', coords: [25.5120, 91.2765] } // Mawsynram
+            ];
+            addPeopleMarkers(people);
+            updateHeatFromPeople(people);
+            mapInitialized = true;
+            updateCounts();
+            setTimeout(() => { leafletMap.invalidateSize(); }, 50);
+        }
+
+        function badgeFor(status) {
+            if (status === 'safe') return '<span class="badge bg-success">Safe</span>';
+            if (status === 'sus') return '<span class="badge bg-warning text-dark">Suspicious</span>';
+            return '<span class="badge bg-danger">Danger</span>';
+        }
+
+        function iconFor(status) {
+            const colors = { safe: 'green', sus: 'orange', danger: 'red' };
+            const color = colors[status] || 'blue';
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="background:${color};width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 2px ${color}33"></div>`,
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
+            });
+        }
+
+        function addPeopleMarkers(people) {
+            if (!markerLayer) return;
+            markerLayer.clearLayers();
+            window.__peopleOnMap = people;
+            people.forEach(p => {
+                const marker = L.marker(p.coords, { icon: iconFor(p.status) })
+                    .bindPopup(`<div><div class="fw-bold">ID: ${p.name}</div>${badgeFor(p.status)}</div>`)
+                    .bindTooltip(`ID: ${p.name} (${p.status.toUpperCase()})`, { direction: 'top', offset: [0, -6], opacity: 0.9 });
+                marker.on('mouseover', () => marker.openTooltip());
+                markerLayer.addLayer(marker);
+            });
+            updateHeatFromPeople(people);
+        }
+
+        function updateHeatFromPeople(people) {
+            if (!heatLayer) return;
+            // Weight: safe=0.3, sus=0.6, danger=1.0
+            const weightFor = (s) => s === 'danger' ? 1 : (s === 'sus' ? 0.6 : 0.3);
+            const pts = people.map(p => [p.coords[0], p.coords[1], weightFor(p.status)]);
+            heatLayer.setLatLngs(pts);
+        }
+
+        function updateCounts() {
+            const people = window.__peopleOnMap || [];
+            let safe = 0, sus = 0, danger = 0;
+            people.forEach(p => { if (p.status === 'safe') safe++; else if (p.status === 'sus') sus++; else danger++; });
+            const safeEl = document.getElementById('safeCount');
+            const susEl = document.getElementById('susCount');
+            const dangerEl = document.getElementById('dangerCount');
+            if (safeEl) safeEl.textContent = String(safe);
+            if (susEl) susEl.textContent = String(sus);
+            if (dangerEl) dangerEl.textContent = String(danger);
+        }
+
+        // Hook Locations nav to initialize map
+        document.querySelectorAll('.sidebar-link[data-target="locations-content"]').forEach(link => {
+            link.addEventListener('click', () => {
+                setTimeout(() => { initMeghalayaMap(); }, 50);
+            });
+        });
+
+        // Add a danger alert into Alerts section
+        const addDangerBtn = document.getElementById('addDangerAlert');
+        if (addDangerBtn) {
+            addDangerBtn.addEventListener('click', () => {
+                // Pick a random person, set to danger, update markers and counts
+                const people = (window.__peopleOnMap || []).slice();
+                if (people.length === 0) return;
+                const idx = Math.floor(Math.random() * people.length);
+                people[idx].status = 'danger';
+                addPeopleMarkers(people);
+                updateCounts();
+                updateHeatFromPeople(people);
+                // Insert alert card at top of Alerts
+                const alertsSection = document.getElementById('alerts-content');
+                if (alertsSection) {
+                    const container = document.createElement('div');
+                    container.className = 'alert-card alert-high';
+                    container.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="fw-bold text-danger">High Priority: User in Danger</h6>
+                                <p class="mb-1">Tourist ID: ${(people[idx].name)} flagged as in danger</p>
+                                <small class="text-muted">Location updated just now</small>
+                            </div>
+                            <button class="btn btn-danger btn-sm">Take Action</button>
+                        </div>`;
+                    alertsSection.insertBefore(container, alertsSection.children[1] || null);
+                }
+                // Switch to Alerts tab to show it
+                const alertsLink = document.querySelector('.sidebar-link[data-target="alerts-content"]');
+                if (alertsLink) alertsLink.click();
+            });
+        }
+    </script>
+</body>
+</html>

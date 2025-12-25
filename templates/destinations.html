@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations - Meghalaya Tourism</title>
+    <meta name="description" content="Explore the beautiful destinations of Meghalaya">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="images/Site logo.png" alt="Site Logo" height="110" class="me-4" style="border-radius: 12px; width: auto; min-width: 280px; max-width: 400px; object-fit: contain;">
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Content -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Main Navigation -->
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="destinations.html">Destinations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="experiences.html">Experiences</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="useful-info.html">Travel Info</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Side Icons -->
+                    <div class="d-flex align-items-center ms-auto">
+                        <button class="btn btn-link text-dark me-3" aria-label="Search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button class="btn btn-link text-dark me-3" aria-label="Favorites">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        
+                        <!-- Login Dropdown Menu -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary rounded-pill px-3 dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i> Sign In
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="loginDropdown">
+                                <li><h6 class="dropdown-header">Choose Login Option</h6></li>
+                                <li><a class="dropdown-item" href="user-login.html"><i class="fas fa-sign-in-alt me-2"></i>User Login</a></li>
+                                <li><a class="dropdown-item" href="user-registration.html"><i class="fas fa-user-plus me-2"></i>User Registration</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="authority-login.html"><i class="fas fa-user-shield me-2"></i>Authority Login</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Spacer for fixed header -->
+    <div class="header-spacer"></div>
+
+    <main>
+        <!-- Page Header -->
+        <section class="hero-section position-relative">
+            <div class="hero-image-container">
+                <img src="images/meghalya Hero.jpg" alt="Meghalaya Destinations" class="hero-image w-100">
+                <div class="overlay"></div>
+            </div>
+            <div class="hero-content-wrapper position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                <div class="container">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-lg-10" data-aos="fade-up" data-aos-delay="100">
+                            <div class="badge bg-primary px-3 py-2 mb-3" data-aos="fade-up" data-aos-delay="200">EXPLORE</div>
+                            <h1 class="display-1 fw-bold mb-4" data-aos="fade-up" data-aos-delay="300">DESTINATIONS</h1>
+                            <p class="lead mb-5 fw-light" data-aos="fade-up" data-aos-delay="400">Discover the mystical beauty of Meghalaya's most enchanting places</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Destinations Grid -->
+        <section class="featured-destinations py-5 my-5">
+            <div class="container">
+                <div class="row justify-content-center text-center mb-5">
+                    <div class="col-lg-8">
+                        <span class="text-primary text-uppercase fw-bold letter-spacing-3" data-aos="fade-up">DISCOVER</span>
+                        <h2 class="display-4 fw-bold mt-2 mb-3" data-aos="fade-up" data-aos-delay="100">FEATURED DESTINATIONS</h2>
+                        <div class="divider mx-auto" data-aos="fade-up" data-aos-delay="200"></div>
+                        <p class="lead text-muted mt-4" data-aos="fade-up" data-aos-delay="300">Explore the most breathtaking places in Meghalaya that will leave you mesmerized</p>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Destination 1 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card destination-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="destination-image-wrapper">
+                                <img src="images/Meghalya hero 2.jpg" class="card-img-top destination-img" alt="Living Root Bridge">
+                                <div class="destination-badge badge bg-primary position-absolute">NATURE</div>
+                                <div class="overlay-gradient"></div>
+                            </div>
+                            <div class="card-body p-4">
+                                <h3 class="card-title h4 fw-bold mb-3">Living Root Bridge</h3>
+                                <p class="card-text text-muted">Marvel at the incredible living root bridges of Cherrapunji, a UNESCO World Heritage site.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a href="nature/living-root-bridge.html" class="btn btn-link text-primary p-0 fw-bold text-decoration-none">
+                                        DISCOVER <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-1"></i>
+                                        <span class="fw-bold">4.9</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Destination 2 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card destination-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="destination-image-wrapper">
+                                <img src="images/Meghalya hero 3.jpg" class="card-img-top destination-img" alt="Nohkalikai Falls">
+                                <div class="destination-badge badge bg-success position-absolute">WATERFALL</div>
+                                <div class="overlay-gradient"></div>
+                            </div>
+                            <div class="card-body p-4">
+                                <h3 class="card-title h4 fw-bold mb-3">Nohkalikai Falls</h3>
+                                <p class="card-text text-muted">Witness the tallest plunge waterfall in India, cascading 340 meters into a deep gorge.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a href="waterfalls/nohkalikai-falls.html" class="btn btn-link text-primary p-0 fw-bold text-decoration-none">
+                                        DISCOVER <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-1"></i>
+                                        <span class="fw-bold">4.8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Destination 3 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card destination-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="destination-image-wrapper">
+                                <img src="images/meghalya hero 4.jpg" class="card-img-top destination-img" alt="Mawsmai Cave">
+                                <div class="destination-badge badge bg-warning position-absolute">CAVE</div>
+                                <div class="overlay-gradient"></div>
+                            </div>
+                            <div class="card-body p-4">
+                                <h3 class="card-title h4 fw-bold mb-3">Mawsmai Cave</h3>
+                                <p class="card-text text-muted">Explore the magnificent limestone caves with stunning stalactite and stalagmite formations.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a href="caves/mawsmai-cave.html" class="btn btn-link text-primary p-0 fw-bold text-decoration-none">
+                                        DISCOVER <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-1"></i>
+                                        <span class="fw-bold">4.6</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-header">
+                <div class="footer-badge">MEGHALAYA TOURISM</div>
+                <h2 class="footer-title">YOUR CLOUD KINGDOM ADVENTURE AWAITS</h2>
+            </div>
+            
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-column-title">About Us</h3>
+                    <p class="footer-text">Your complete guide to exploring the mystical beauty of Meghalaya and its enchanting cloud-covered landscapes.</p>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="destinations.html" class="footer-link">Destinations</a></li>
+                        <li><a href="experiences.html" class="footer-link">Experiences</a></li>
+                        <li><a href="attractions.html" class="footer-link">Attractions</a></li>
+                        <li><a href="events.html" class="footer-link">Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Information</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html" class="footer-link">About Meghalaya</a></li>
+                        <li><a href="news.html" class="footer-link">News</a></li>
+                        <li><a href="useful-info.html" class="footer-link">Useful Information</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Connect With Us</h4>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© <span id="current-year"></span> Meghalaya Tourism. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Update current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
